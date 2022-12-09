@@ -22,4 +22,4 @@ export async function getCategory(req, res) {
     console.log(error);
     res.sendStatus(500);
   }
-}
+} 
