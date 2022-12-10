@@ -7,7 +7,7 @@ export async function postCategory(req, res) {
     "INSERT INTO categories (name) VALUES ($1)",
     [name]
   );
-
+ 
   console.log(newCategory);
   res.send(newCategory);
 
