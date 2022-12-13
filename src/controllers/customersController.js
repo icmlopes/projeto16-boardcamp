@@ -3,6 +3,15 @@ import connection from "../database/db.js";
 export async function postCustomer(req, res) {
   const { name, phone, cpf, birthday } = req.body;
 
+  const existingCpf = await connection.query(
+    "SELECT * FROM customers WHERE cpf = $1",
+    [cpf]
+  );
+
+  if (existingCpf.rowCount > 0) {
+    return res.status(409).send("Esse CPF já existe em nosso sistema!");
+  }
+
   const newClient = await connection.query(
     "INSERT INTO customers (name, phone, cpf, birthday) VALUES ($1, $2, $3, $4)",
     [name, phone, cpf, birthday]
@@ -29,8 +38,8 @@ export async function getCustomer(req, res) {
     }
     const showCustomers = await connection.query("SELECT * FROM customers");
     res.send(showCustomers.rows);
-  } catch {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
     res.sendStatus(500);
   }
 }

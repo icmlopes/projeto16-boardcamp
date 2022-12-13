@@ -16,16 +16,5 @@ export async function gamesSchemaValidation(req, res, next) {
     return res.status(422).send(errors);
   }
 
-  const existingName = await connection.query(
-    "SELECT * FROM games WHERE name LIKE $1",
-    [`${name}%`]
-  );
-
-  if (existingName.rowCount > 0) {
-    return res.status(409).send("Já temos esse jogo em nosso sistema!");
-  }
-
-  //fazer a validação do id, se ele já for existente
-
   next();
 }

@@ -24,10 +24,6 @@ export async function customersSchemaValidation(req, res, next) {
   if (existingCpf.rowCount > 0) {
     return res.status(409).send("Esse CPF já existe em nosso sistema!");
   }
-
-  //fazer a validação do não pode ter o mesmo CPF cadastrado
-
-  //Quando coloco a data errada não aparece erro! Consertar isso!
-
+  
   next();
 }
