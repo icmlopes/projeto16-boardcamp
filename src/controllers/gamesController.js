@@ -27,12 +27,18 @@ export async function getGames(req, res) {
       res.send(showByname.rows);
       return;
     }
-    const showGames = await connection.query("SELECT * FROM games");
-    res.send(showGames.rows);
+
+    const categoryName = await connection.query(
+      `SELECT
+        games.*, categories.name AS "categoryName" 
+      FROM games 
+      JOIN categories 
+        ON games."categoryId" = categories.id`
+    );
+
+    res.send(categoryName.rows);
   } catch {
     console.log(error);
     res.sendStatus(500);
   }
-
-  //falta inserir o nome da categoria
 }
