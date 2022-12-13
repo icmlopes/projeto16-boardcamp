@@ -1,6 +1,7 @@
 import { gamesSchema } from "../model/gamesModel.js";
+import connection from "../database/db.js";
 
-export function gamesSchemaValidation(req, res, next) {
+export async function gamesSchemaValidation(req, res, next) {
   const { name, image, stockTotal, categoryId, pricePerDay } = req.body;
 
   const { error } = gamesSchema.validate(
@@ -15,9 +16,16 @@ export function gamesSchemaValidation(req, res, next) {
     return res.status(422).send(errors);
   }
 
-  //fazer a validação do id, se ele já for existente
+  const existingName = await connection.query(
+    "SELECT * FROM games WHERE name LIKE $1",
+    [`${name}%`]
+  );
 
-  //fazer a validação do name, não pode ser repetido
+  if (existingName.rowCount > 0) {
+    return res.status(409).send("Já temos esse jogo em nosso sistema!");
+  }
+
+  //fazer a validação do id, se ele já for existente
 
   next();
 }

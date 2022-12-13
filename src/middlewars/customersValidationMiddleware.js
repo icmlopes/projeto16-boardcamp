@@ -1,6 +1,7 @@
 import { customersSchema } from "../model/customersModel.js";
+import connection from "../database/db.js";
 
-export function customersSchemaValidation(req, res, next) {
+export async function customersSchemaValidation(req, res, next) {
   const { name, phone, cpf, birthday } = req.body;
 
   const { error } = customersSchema.validate(
@@ -15,10 +16,14 @@ export function customersSchemaValidation(req, res, next) {
     return res.status(422).send(errors);
   }
 
-  //   if (customerData === null) {
-  //     res.status(400).send("Esse espaço não pode ser vazio.");
-  //     return;
-  //   }
+  const existingCpf = await connection.query(
+    "SELECT * FROM customers WHERE cpf LIKE $1",
+    [`${cpf}%`]
+  );
+
+  if (existingCpf.rowCount > 0) {
+    return res.status(409).send("Esse CPF já existe em nosso sistema!");
+  }
 
   //fazer a validação do não pode ter o mesmo CPF cadastrado
 
