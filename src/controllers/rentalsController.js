@@ -42,7 +42,6 @@ export async function postRental(req, res) {
 
 export async function getRental(req, res) {
   try {
-    console.log("Ai pai");
     const showRentals = await connection.query(
       `SELECT rentals.*, customers.name AS "customerName", games.name AS "gameName", categories.id AS "categoryId", categories.name AS "categoryName"
       FROM rentals 
