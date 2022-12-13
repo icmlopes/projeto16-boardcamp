@@ -15,3 +15,4 @@ router.get("/customers/:id", getCustomerById);
 router.put("/customers/:id", customersSchemaValidation, putCustomerById);
 
 export default router;
+    
